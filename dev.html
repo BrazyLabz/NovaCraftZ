@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0810">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NovaCraftZ">
+<meta name="description" content="NovaCraftZ — open-world zombie survival in blocks. 2010, after the outbreak.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<title>NovaCraftZ</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- ============ HUD ============ -->
+<div id="hud" class="hidden">
+  <div id="nightTint"></div>
+  <div id="sleepFade"><b>Zzz…</b></div>
+  <div id="underwater" class="hidden"></div>
+  <div id="vignette"></div>
+  <div id="crosshair"><svg viewBox="0 0 42 42"><circle cx="21" cy="21" r="18"/></svg></div>
+  <div id="clock"></div>
+  <div id="alert" class="hidden">THEY SEE YOUR LIGHT</div>
+  <div id="hunters" class="hidden" title="Zombies hunting you"><img src="textures/gui/zombie_icon.png" alt=""><span id="huntersN">0</span><em id="stealthTag" class="hidden"></em><i id="huntBar"><b></b></i></div>
+  <div id="notify"></div>
+  <div id="boostHud" class="hidden"></div>
+  <div id="carHud" class="hidden"><b id="carName"></b><span id="carSpeed"></span><b id="carFuelPct"></b><span id="carTires"></span><span id="carHp"><i><b></b></i><em></em></span><small id="carInfo"></small></div>
+  <div id="selHud" class="hidden"></div>
+  <div id="itemName"></div>
+  <div id="hotbarWrap"><div id="stats"><div id="hearts"></div><div id="hunger"></div></div><div class="hotrow2"><div id="offSlot" class="slot hidden"></div><div id="hotbar"></div></div></div>
+  <div id="debug" class="hidden"></div>
+</div>
+<div id="clickToPlay" class="screen hidden" style="background:rgba(0,0,0,.35);cursor:pointer"><div class="panel" style="text-align:center"><h2 style="margin:0">Click to play</h2><p style="color:var(--ui-text-dim);margin:8px 0 0">WASD move · Mouse look · E inventory · Esc pause</p></div></div>
+
+<div id="rotateWarn" class="screen hidden" style="z-index:300;background:#000"><div class="menu" style="text-align:center"><div class="logo" style="font-size:44px">NOVA<span>CRAFT</span>Z</div><p class="tagline" style="margin-top:20px">Turn your phone sideways to play</p></div></div>
+<div id="glFail" class="screen solid hidden" style="z-index:310"><div class="menu panel" style="text-align:center"><h2>Can't start 3D graphics</h2><p style="color:var(--ui-text-dim);line-height:1.5">Your browser blocked WebGL. Try Chrome, Edge or Safari, update your browser, or turn on hardware acceleration.</p></div></div>
+
+<!-- ============ INVENTORY ============ -->
+<div id="invScreen" class="screen hidden"></div>
+<div id="creativeScreen" class="screen hidden"></div>
+<div id="saveBuild" class="screen hidden"></div>
+<div id="cursorItem" class="hidden"></div>
+<div id="tooltip" class="hidden"></div>
+
+<!-- ============ MENUS ============ -->
+<div id="boot" class="screen solid"><div class="logo">NOVA<span>CRAFT</span>Z</div><p class="tagline" id="bootMsg">Loading…</p></div>
+
+<div id="title" class="screen solid hidden">
+  <div class="warn hidden" id="fileWarn"><b>Heads up:</b> browsers block textures when you double-click index.html. Start the game with <b>Play NovaCraftZ.bat</b> (Windows) or open it from your GitHub Pages link.</div>
+  <div class="logo">NOVA<span>CRAFT</span>Z</div>
+  <div class="splash" id="splash"></div>
+  <div class="tagline">After the outbreak · 2010</div>
+  <div class="menu">
+    <button class="btn" id="bPlay">Play</button>
+    <button class="btn hidden" id="bJoin">Join a Friend</button><!-- v0.70: joining is in the Play lobby (Add friend) or an invite link -->
+    <div class="row"><button class="btn" id="bOptions">Options</button><button class="btn" id="bEditor">Editor</button></div>
+    <button class="btn hidden" id="bMods">Mods</button><!-- v0.70: Mods live in Library → Mods -->
+    <button class="btn hidden" id="bHelp">How to Play</button><!-- v0.70: How to Play lives in Options -->
+  </div>
+  <div id="a2hs" class="hidden tip">For full screen on iPhone: tap <b>Share</b> → <b>Add to Home Screen</b>, then open NovaCraftZ from your home screen.</div>
+  <div class="version">NovaCraftZ v0.76 · made with GOZA</div>
+</div>
+
+<div id="worlds" class="screen solid hidden"><div class="menu panel">
+  <h2>Select World</h2>
+  <div class="worldlist" id="worldList"></div>
+  <div class="row"><button class="btn" id="bPlaySel">Play</button><button class="btn" id="bCreate">Create New</button></div>
+  <div class="row"><button class="btn danger" id="bDelete">Delete</button><button class="btn" data-back="title">Back</button></div>
+</div></div>
+
+<div id="create" class="screen solid hidden"><div class="menu panel">
+  <h2>Create New World</h2>
+  <label class="lbl">World name</label><input class="field" id="wName" maxlength="40">
+  <label class="lbl">Seed (leave blank for random)</label><input class="field" id="wSeed" maxlength="40" placeholder="e.g. outbreak2010">
+  <button class="btn" id="wMode">Game Mode: Survival</button>
+  <p class="modeinfo" id="wModeInfo"></p>
+  <button class="btn" id="bDoCreate">Create World</button>
+  <button class="btn" data-back="worlds">Cancel</button>
+</div></div>
+
+<!-- multiplayer: join a friend (js/net.js) -->
+<div id="join" class="screen solid hidden"><div class="menu panel">
+  <h2>Join a Friend</h2>
+  <p class="modeinfo">Your friend presses <b>Play → Add friend</b> (or pauses in their world and taps <b>Invite friends</b>). Type the code they see, or just open their invite link.</p>
+  <label class="lbl">Your name</label><input class="field" id="jName" maxlength="16" autocomplete="off">
+  <label class="lbl">Invite code</label><input class="field mp-codein" id="jCode" maxlength="8" placeholder="K7M2Q" autocapitalize="characters" autocomplete="off" spellcheck="false">
+  <button class="btn" id="bDoJoin">Join Game</button>
+  <p class="modeinfo mp-status" id="jStatus"></p>
+  <ul class="mp-players jparty" id="jParty"></ul>
+  <button class="btn" id="bJoinBack">Back</button>
+</div></div>
+
+<div id="options" class="screen solid hidden"><div class="menu panel opt-panel">
+  <h2>Options</h2>
+  <div class="row ingame-only" id="oWorldRow"><button class="btn" id="oMode">Game mode</button><button class="btn" id="oTime">Time</button></div>
+  <div class="opt-sliders">
+    <div class="slider"><label class="lbl">Render distance <span class="v" id="oRDV"></span></label><input type="range" id="oRD" min="2" max="12" step="1"></div>
+    <div class="slider"><label class="lbl">Field of view <span class="v" id="oFovV"></span></label><input type="range" id="oFov" min="50" max="110" step="1"></div>
+    <div class="slider"><label class="lbl">Look sensitivity <span class="v" id="oSensV"></span></label><input type="range" id="oSens" min="0.2" max="3" step="0.05"></div>
+    <div class="slider"><label class="lbl">Resolution <span class="v" id="oScaleV"></span></label><input type="range" id="oScale" min="0.5" max="1.5" step="0.05"></div>
+    <div class="slider"><label class="lbl">HUD size <span class="v" id="oHudV"></span></label><input type="range" id="oHud" min="0.6" max="1.6" step="0.05"></div>
+  </div>
+  <div class="row"><button class="btn" id="oShaders">Shaders</button><button class="btn" id="oGlow">Item glow</button><button class="btn" id="oBlood">Blood</button></div>
+  <div class="row"><button class="btn" id="oVoice">Robot voice</button><button class="btn" id="oHear">Zombie hearing</button><button class="btn" id="oShadows">Shadows</button></div>
+  <div class="row"><button class="btn" id="oAA">Anti-aliasing</button><button class="btn" id="oSharp">Sharpen</button><button class="btn" id="oDynRes">Dynamic resolution</button></div>
+  <div class="row"><button class="btn" id="bColors">Colours…</button><button class="btn" id="bBuildings">Buildings…</button></div>
+  <button class="btn touchonly" id="oPickBtn">Pick block button</button>
+  <div class="optrow"><label class="lbl">Your skin <small id="oSkinInfo">Any Minecraft skin PNG (64×64 or the old 64×32).</small></label><button class="btn sm" id="oSkin">Upload skin…</button><button class="btn sm" id="oSkinReset">Default skin</button><input type="file" id="oSkinFile" accept="image/png,image/*" hidden></div>
+  <div class="row"><button class="btn" id="bControls">Controls…</button><button class="btn opt-done" id="bOptDone">Done</button></div>
+</div></div>
+
+<!-- v0.21: Options → Buildings (what spawns in your next new world) -->
+<div id="optBuildings" class="screen solid hidden"><div class="menu panel ob-panel">
+  <h2>Buildings</h2>
+  <p class="modeinfo" style="margin-top:0">These buildings spawn in the <b>next world you create</b>. Edit a building to change its name, type, front door or how often it spawns, or export it as a file to share.</p>
+  <p class="modeinfo" id="obCount" style="margin:0 0 8px"></p>
+  <div class="cr-chips" id="obChips"></div>
+  <div class="cr-cards ob-list" id="obList"></div>
+  <p class="modeinfo ob-status"></p>
+  <div class="row"><button class="btn" id="obImport">Import…</button><button class="btn" id="obExportAll">Export all</button></div>
+  <div class="row"><button class="btn" id="obRestore">Restore defaults</button><button class="btn" id="obDone">Done</button></div>
+</div></div>
+<div id="optBuildEdit" class="screen solid hidden"><div class="menu panel sb-panel" id="obEdit"></div></div>
+
+<div id="colors" class="screen solid hidden"><div class="menu panel">
+  <h2>Colours</h2>
+  <div class="optrow"><label class="lbl">Hunger</label><select id="oHunger"><option value="apple">Red apples</option><option value="orange">Oranges</option><option value="watermelon">Watermelon</option><option value="bar">Bar</option></select><input type="color" id="oHungerColor" title="Bar colour"></div>
+  <div class="optrow"><label class="lbl">Heart colour</label><input type="color" id="oHeartColor"></div>
+  <div class="optrow"><label class="lbl">Hotbar selector</label><input type="color" id="oSelColor"></div>
+  <div class="optrow"><label class="lbl">Stamina bar</label><input type="color" id="oStamColor"></div>
+  <div class="optrow"><label class="lbl">Menu colour</label><input type="color" id="oAccentColor"></div>
+  <button class="btn" id="oColorsReset">Reset colours</button>
+  <button class="btn" id="bColorsDone">Done</button>
+</div></div>
+
+<div id="controls" class="screen solid hidden"><div class="menu panel" style="width:min(620px,94vw)">
+  <h2>Controls</h2>
+  <p class="modeinfo" style="margin-top:0">Click a control, then press the key or mouse button you want. Esc cancels.</p>
+  <div class="klist" id="controlsList"></div>
+  <div class="row"><button class="btn" id="bCtlReset">Reset to defaults</button><button class="btn" id="bCtlDone">Done</button></div>
+</div></div>
+
+<div id="help" class="screen solid hidden"><div class="menu panel" style="width:min(640px,94vw)">
+  <h2>How to Survive</h2>
+  <p style="color:var(--ui-text-dim);line-height:1.5;margin-top:0">Daylight is for scavenging. A few slow zombies roam. At <b style="color:var(--ui-danger)">night</b> the horde comes out — if they <b style="color:var(--ui-danger)">see light</b> they rush you and tear down anything in their way. Hole up in a building, board up the doors and windows with planks, and stay dark.</p>
+  <p class="touchonly" style="color:var(--ui-text-dim);line-height:1.6"><b style="color:#fff">Touch:</b> left thumb = move (push all the way to sprint) · drag right side = look · <b style="color:#fff">tap</b> = place / use · <b style="color:#fff">hold</b> = mine / attack · buttons for jump, hit/fire, use/aim/eat, sneak (exit car), bag, torch, drop.</p>
+  <div class="keys" id="helpKeys"></div>
+  <p style="color:var(--ui-text-dim);line-height:1.5">Punch trees → planks → crafting table → wooden tools. Mine down for cobblestone, coal and iron. Coal + stick = torches. Break supply crates in buildings for loot.</p>
+  <button class="btn" data-optback="1">Back</button>
+</div></div>
+
+<div id="mods" class="screen solid hidden"><div class="menu panel">
+  <h2>Mods</h2><ul class="mods" id="modList"></ul>
+  <button class="btn" data-back="title">Back</button>
+</div></div>
+
+<div id="loading" class="screen solid hidden"><div class="menu" style="text-align:center">
+  <div class="logo" style="font-size:56px">NOVA<span>CRAFT</span>Z</div>
+  <p class="tagline" id="loadMsg" style="margin:16px 0 0">Generating world…</p>
+  <div class="bar"><i id="loadBar"></i></div>
+</div></div>
+
+<div id="pause" class="screen hidden"><div class="menu">
+  <h2>Game Paused</h2>
+  <button class="btn" id="bResume">Back to Game</button>
+  <button class="btn" id="bHost">Invite friends</button>
+  <div id="hostPanel" class="panel mp-panel hidden">
+    <div class="mp-code-lbl">Invite code</div>
+    <div class="mp-code" id="hostCode">· · · · ·</div>
+    <div class="row"><button class="btn sm" id="bCopyLink">Copy invite link</button><button class="btn sm" id="bShareLink">Share…</button></div>
+    <p class="modeinfo" id="hostInfo"></p>
+    <div class="optrow"><label class="lbl">Your name</label><input class="field mp-name" id="hName" maxlength="16" autocomplete="off"></div>
+    <ul class="mp-players" id="hostPlayers"></ul>
+    <button class="btn sm danger" id="bStopHost">Stop hosting</button>
+  </div>
+  <p class="modeinfo mp-client hidden" id="mpClientInfo"></p>
+  <button class="btn" id="bPauseOpt">Options</button>
+  <button class="btn danger" id="bQuit">Save &amp; Quit to Title</button>
+</div></div>
+
+<div id="death" class="screen death hidden"><div class="menu" style="text-align:center">
+  <h1>YOU DIED</h1><p id="deathInfo" style="color:#fff;font-size:18px"></p>
+  <button class="btn" id="bRespawn">Respawn</button>
+  <button class="btn" id="bDeathQuit">Title Screen</button>
+</div></div>
+
+<!-- ============ SCRIPTS (order matters) ============ -->
+<script src="js/lib/three.min.js"></script>
+<script src="js/lib/peerjs.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/keys.js"></script>
+<script src="js/data/blocks.js"></script>
+<script src="js/data/items.js"></script>
+<script src="js/data/stores.js"></script>
+<script src="js/data/blocks_late.js"></script>
+<script src="js/data/hospital_blocks.js"></script>
+<script src="js/data/furniture_blocks.js"></script>
+<script src="js/data/home_blocks.js"></script>
+<script src="js/data/town_blocks.js"></script>
+<script src="js/data/recipes.js"></script>
+<script src="js/data/loot.js"></script>
+<script src="js/structures.js"></script>
+<script src="js/data/buildings.js"></script>
+<script src="js/data/novera_buildings.js"></script>
+<script src="js/data/library_pack.js"></script>
+<script src="js/worldgen.js"></script>
+<script src="js/world.js"></script>
+<script src="js/textures.js"></script>
+<script src="js/models.js"></script>
+<script src="js/mesher.js"></script>
+<script src="js/render.js"></script>
+<script src="js/entitylight.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/save.js"></script>
+<script src="js/player.js"></script>
+<script src="js/entities.js"></script>
+<script src="js/zpath.js"></script>
+<script src="js/ui.js"></script>
+<script src="sounds/sounds.js"></script>
+<script src="js/drops.js"></script>
+<script src="js/damage.js"></script>
+<script src="js/interact.js"></script>
+<script src="js/trees.js"></script>
+<script src="js/gates.js"></script>
+<script src="js/banners.js"></script>
+<script src="js/viewmodel.js"></script>
+<script src="js/data/vehicles.js"></script>
+<script src="js/vehicles.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/creative.js"></script>
+<script src="js/buildopts.js"></script>
+<script src="mods/mods.js"></script>
+<script src="js/containers.js"></script>
+<script src="js/hospital.js"></script>
+<script src="js/tools3d.js"></script>
+<script src="js/furniture.js"></script>
+<script src="js/home.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/mirror.js"></script>
+<script src="js/traffic.js"></script>
+<script src="js/town.js"></script>
+<script src="js/farming.js"></script>
+<script src="js/water.js"></script>
+<script src="js/animals.js"></script>
+<script src="js/craftbook.js"></script>
+<script src="js/stove.js"></script>
+<script src="js/lift.js"></script>
+<script src="js/power.js"></script>
+<script src="js/ores.js"></script>
+<script src="js/desk.js"></script>
+<script src="js/polish.js"></script>
+<script src="js/guns.js"></script>
+<script src="js/gear.js"></script>
+<script src="js/shields.js"></script>
+<script src="js/survival.js"></script>
+<script src="js/menus.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/sewers.js"></script>
+<script src="js/neon.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/law.js"></script>
+<script src="js/aipd.js"></script>
+<script src="js/arrest.js"></script>
+<script src="js/station.js"></script>
+<script src="js/custody.js"></script>
+<script src="js/people.js"></script>
+<script src="js/dialogue.js"></script>
+<script src="js/gangs.js"></script>
+<script src="js/wildlife.js"></script>
+<script src="js/character.js"></script>
+<script src="js/net.js"></script>
+<script src="js/visuals3d.js"></script>
+<script src="js/roads.js"></script>
+<script src="js/generators.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/lobby.js"></script>
+<script src="js/data/zm_tex.js"></script>
+<script src="js/data/zm_westvale.js"></script>
+<script src="js/arcade.js"></script>
+<script src="js/builder_tools.js"></script>
+<script src="js/zombies_mode.js"></script>
+<script src="js/library.js"></script>
+<script src="js/progression.js"></script>
+<script src="js/torchfx.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/perf.js"></script>
+<script src="js/look.js"></script>
+<script src="js/flyfx.js"></script>
+<script src="js/party.js"></script>
+<script src="js/zpile.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
