@@ -39,6 +39,24 @@ During the day you scavenge. At night the horde comes out, and if zombies **see 
 | W/S · A/D · Space · Shift (in a car) | Drive · steer · brake · get out |
 | Esc | Pause |
 
+## v0.84 notes: fog colour, Block Replace Wand, your shadow, smoother water
+- **The black distant silhouettes are gone** (buildings went dark, then black, then white fog). Far away is the normal fog again, and it's lighter on the graphics card.
+- **Options → Colours → Fog colour**: pick any colour for the fog and horizon to try a different look (it still darkens at night). **Default** puts the sky's own colour back.
+- **Block Replace Wand** (Creative → Tools): **Shift + left-click** a block (say one brick in a brick wall). It breaks and a picker of full blocks opens. Pick one and every block **touching** it that is the same block (and the same paint) becomes the new block, the hole too. Or close the picker and **place a block in the hole**: everything that was like the broken block turns into the block you placed. Max **1000 blocks** at a time (so grass by accident can't eat the world). **Ctrl + Z** = undo. Without Shift it breaks blocks like normal.
+- **Your shadow**: a soft shadow under your feet when you stand on the ground (before, it only showed up when you were flying a few blocks up).
+- **Water**: no more big lag when you pour water (only the bits of the world the water touches are redrawn; the light under it catches up a second later). Flowing water is **one joined, sloped sheet**: no more gaps / separate steps in falling and spreading water.
+- **Your Worlds** is now a list of thin rows you scroll up and down (like Minecraft).
+- Backup from before these changes: `_Backups/backup-2026-10-28_v0.84/` (web + the exe's app.asar).
+
+## v0.83 notes: main menu, Your Worlds, Create New World, Map Editing worlds
+- **Main menu** = the globe screen: **START**, Options, Editor, Join a Friend (top right: your profile). No inviting here any more — invite friends from inside your world (Esc → Invite friends). The title screen's Library button is gone (Studio → Library has everything).
+- **START → Your Worlds**: all your worlds side by side, newest saved first (scroll sideways / mouse wheel). Each card: name, gamemode (Survival, Creative Realm, One Chunk, Zombies, Gun Game, Map Editing), the day it was made. Click = play. **•••** = World options: name, mob settings, zombie hearing, keep inventory, mob spawning, mob block breaking, mob loot drop, RPG system, difficulty (Survival, under the seed — the seed can't change), **Save / Cancel / Export world / Delete**. Bottom bar: Back · Import world · **+ Create new world**.
+- **Create New World** (side tabs): **Main** — World Name, Gamemode (Survival, Creative Realm, Block Hunt, Gun Game, Zombies, One Chunk), Difficulty (Survival only), and for Zombies / Gun Game the **Map** (maps whose file name starts with **zm_** / **gg_**, plus the ones that come with the game). **Advanced** — World Seed, mob settings, zombie hearing, mob block breaking, **RPG system** (on: learn skills to unlock recipes; off: every recipe is there to see). Creative: the ground instead — **Void** (nothing but one bedrock block to stand on) or any block, grid lines. Zombies / Gun Game / Block Hunt have no Advanced settings. **Cheats** — keep inventory, mob spawning, mob loot drop.
+- **Zombie hearing** moved from Options → Interface & HUD into each world's settings.
+- **Map Editing**: clicking a map in Studio → Library → Maps opens it in a Map Editing world — the map floating in the void, no ground. **Save & Quit** asks to write your changes over the map: **Yes** / **Override later** (asked again next time). Gun Game / Zombies then play your version (also for Lil Boat).
+- Glow pixels: full, vivid colour; items and blocks in your hand glow; repainted high-res blocks (brick, planks, concrete…) show your paint and glow. No more ground lines in the curved world.
+- Backup from before these changes: `_Backups/backup-2026-10-28_v0.83-menus/` (web + the exe's app.asar).
+
 ## v0.71 notes: 4-way stops, streets that stop before the beach, living torches
 - **Crossings are 4-way stops (new worlds):** a stop sign on every corner facing the cars coming in, a solid **stop line**
   across the incoming lanes, then the **crosswalk** (wide white bars: the new **Crosswalk Bar** block, 4x as wide as a road
