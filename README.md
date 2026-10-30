@@ -39,6 +39,174 @@ During the day you scavenge. At night the horde comes out, and if zombies **see 
 | W/S · A/D · Space · Shift (in a car) | Drive · steer · brake · get out |
 | Esc | Pause |
 
+## v0.94: POWER TO THE WALLS, OUTLETS, AC CABLE, GAMING CONSOLE, GAME DISCS, GAME ZONE
+- **Wall power:** run the white Power Cable from a running generator until it touches a wall (along the floor up to it, or climbing it). A patch of that wall **5 wide x 4 high** gets power. **F4** makes everything with electricity glow yellow: powered wall, live cable, outlets and plugged-in things.
+- **Wall Outlet** (1 copper + 1 iron): a small white plate (2/8 wide, 3/8 tall, 1 px deep) that goes on walls only. It's live when the wall behind it has power, so put it on the inside of the wall you powered from outside.
+- **AC Cable** (1 copper + 1 coal = 2): a black power cord that works like a lead. Holding it, right-click a live outlet, then a TV, monitor or Gaming Console. It's plugged in and the cord sags between them (reaches 10 blocks). Sneak + right-click an outlet with an empty hand unplugs everything from it. TVs and consoles need a cord to a live outlet (a generator's area still powers them too).
+- **Gaming Console** (4 iron + 2 copper + 1 glass) + **Controller** (1 iron + 1 copper). Holding the controller, **sneak + right-click** the console. It turns on (blue light), your view zooms into a powered TV within 5 blocks, and the game plays on its screen.
+  - Controls: left/right or A/D move, Space / W / up jump, **Esc** stops. On phones you get on-screen buttons.
+  - Built in: **Platform Test** (2 levels: coins, blobs to stomp, spikes, the flag).
+  - **Game Discs:** right-click the console holding one to put it in; sneak + right-click with an empty hand ejects it (or unplugs it if there's no disc). **Moon Lander** (land soft on the pad) and **Zombie Rush** (survive the horde; you shoot on your own).
+- **Game Zone:** an abandoned game store in the city (**new worlds**). Its shelves have discs, controllers, cables and outlets, with a console + TV on display. Discs also turn up now and then in supply crates (any world).
+- Everything is in the new **Creative → Power & Games** tab.
+- Files: `js/electric.js`. Textures: `tools/make_v94.py`.
+
+## v0.93b: THE ROCKET + THE LUNAR HOLLOW
+- **Rocket** (Crafting Book: 100 iron, or Creative → Lunar). Place it and it stands 6 blocks tall, its window facing you.
+  - **Sneak + right-click:** the rocket's menu: a 9-slot hold (it flies with you) and the **fuel tank**. It needs **100 gallons** to launch.
+  - **Pour a Gas Can** pours in one of your Gas Cans (10 gallons) and the gauge slowly fills. In Creative the button pours gas with no cans, as often as you like.
+  - Right-click it holding a Gas Can to pour straight in. **Right-click when it's full: LAUNCH.** Lift-off, and you land on the Moon with your rocket beside you. Flying home from the Moon needs no fuel.
+  - Breaking it drops the rocket and its hold (the fuel is lost).
+- **The Lunar Hollow:** the Moon is hollow. **10 blocks under the moonrock** lies a huge cavern lit by blue crystals hanging from the ceiling. Dig down anywhere, or drop through the hole in the middle of some big craters (the fall hurts).
+  - **Silverroot forests** on terraced shores: chalk-white trunks, angular branches, indigo leaves with glowing pores. Old trees have hollow trunks you can walk into. Logs make 4 Silverroot Planks; leaves sometimes drop **Glowing Sap** (2 sap + 1 iron = a **Sap Lantern**).
+  - **Lakes:** cold ones are frozen with cloudy **Lunar Ice**, with rare blue **Starfrost**. Breaking Starfrost lets out a freezing mist and sometimes what was frozen inside.
+  - **Warm springs:** silver grass, glowing **violet mushrooms**, and vines hanging from the rock (climbable). Stone pillars hold the ceiling up. Dark **lunar basalt** lies under the floor.
+  - Inside, the light turns crystal blue with a deep blue haze.
+  - Everything is in the new **Creative → Lunar** tab.
+- **Coming next:** the Hollow's creatures, the Selari and their villages and temple cities, and the Frostbound.
+- Files: `js/rocket.js`, `js/lunar.js` (+ small hooks in `js/moon.js`, `js/render.js`). Textures: `tools/make_v93.py`.
+
+## v0.93: THE MOON (a second dimension)
+- **Go there:** open chat (Enter) and type **`/dimension moon`**. **`/dimension earth`** takes you back to exactly where you left. Anyone can use it in multiplayer (host or friend); it only moves you. (`/dim moon` works too.)
+- **Two worlds, one save:** the Moon is its own area of the same seeded world, far east past a bedrock wall at the edge of Earth's map (x 60,000). Your Moon builds save, sync to friends and stay separate from Earth: a block at 10, 65, 10 on the Moon never touches Earth. The clock shows Moon coordinates (0, 0 = the landing site).
+- **Moonrock:** new white-yellow rock (Creative → Blocks). The Moon is moonrock over stone, with rolling hills, flat low "seas", highlands and **craters in round clusters**, big ones with little ones inside. Infinite.
+- **Low gravity:** about 30% of Earth's. You jump about 4 blocks, hang in the air for 2 seconds, and falls barely hurt. Floating dust drifts around you.
+- **Space sky:** always black and full of stars, harsh steady sunlight, and a soft, blurry, slowly turning **cube Earth** in the sky.
+- **Small round world look:** a wider fisheye lens, and the curved world bends twice as hard on the Moon.
+- No zombies, people, robots or cars on the Moon. If you die there you wake up at your Earth spawn.
+- Files: `js/moon.js` (all of it), plus small hooks in `js/render.js` (fisheye), `js/player.js` (gravity), `js/chat.js` (the command). Texture: `textures/blocks/moonrock.png`.
+
+## v0.92
+- **Power cable merges:** one block can now hold cable on **several sides** (floor + wall, wall + ceiling…), so a run can turn a corner and join another run in the same spot. Right-click the next side of a block that already has cable and it's added there.
+  - While you hold cable you **aim through other cables** at the wall / floor / ceiling behind them.
+  - Cable that wraps **round the edge of a block** (up a wall and over the top) connects too.
+  - Breaking a block with cable on several sides takes off **only the side you aim at**.
+  - A **Building Generator** powers cable touching any part of it, not just one corner.
+  - Where cable can't go, it says so ("No room for cable there").
+- **Generators are 3D** in your inventory and your hand (portable, building and infinite generator). The power cable, street lamp, traffic-light mast, bollard and garage door items now show their own pictures instead of a plain cube.
+- **Machete combo speed by material:** wood swings at the old speed (the slowest); stone 1.2x, iron 1.4x, gold 1.6x, diamond 1.8x, **rubynite 2x as fast** — the swings and the cooldown between hits. Hover a machete + Shift to see its cooldown.
+- **Each machete has its own hit sound slot:** drop `wood_hit`, `stone_hit`, `iron_hit`, `gold_hit`, `diamond_hit`, `rubynite_hit` (.wav, .mp3 or .ogg) in **`sounds/machete/`**. No file = the normal machete hit. Volume and extra variations: `sounds/sounds.js`.
+- **Gold tools:** Gold Machete, Pickaxe, Axe, Shovel and Hoe (gold ingots + sticks, like the other tools). They use the diamond models in a **yellow → orange gradient** (orange by the handle, yellow at the tip) and follow any Studio edits of the diamond tools, like rubynite does. Between iron and diamond: 2.5x damage (a gold machete = 7.5 hearts), mines what iron mines.
+- **Charcoal:** logs (oak, birch) smelt into charcoal in the Blast Furnace (and still burn as fuel).
+- **Overgrown road edges** (where the grass creeps onto the asphalt) are road height now, 6/8 of a block, like the asphalt.
+- **Mob health hearts:** stand near a mob (10 blocks) and you see its hearts over its head: zombies, animals, survivors, bandits and the AIPD. Big mobs (more than 20 hearts) show 10 hearts for their whole health plus the number. Hidden behind a wall = no hearts. **Options → Interface & HUD:** *Mob health hearts* ON / OFF and **Mob heart colour** (the colour is on the Colours page too).
+- **Tool Tiers:** every tool's numbers are in one chart, **`ToolTiers/ToolTiers.txt`**: the machetes' 3 hits, combo speed, waits and uses, and every pickaxe / axe / shovel / hoe's damage, mining speed, what it can mine and uses. Change a number, save, double-click **`ToolTiers/Update Tool Tiers.bat`**: it puts them in the game (`js/data/tool_tiers.js`), works out each machete's full combo time and damage per second, and rebuilds index.html + the Windows game.
+- **New machete numbers** (hearts per hit 1 / 2 / ultimate, wait after a hit / after the ultimate): Wooden 2 / 3.75 / 4, 0.5 s / 2.2 s, 1x · Stone 4.5 / 5.6 / 9, 0.83 / 1 s, 1.2x · Iron 6 / 7.5 / 12, 0.71 / 0.86 s, 1.4x · Gold 7.5 / 9.4 / 15, 0.63 / 0.75 s, 1.6x · **Diamond 12 / 15 / 24, 0.5 / 0.6 s, 2x, 1500 uses** · **Rubynite 15 / 18.75 / 30, 0.45 / 0.55 s, 2.2x, 2000 uses**.
+- **The old AIPD Robot and the AIPD Enforcer are gone** (game, Creative Mobs tab, Studio library, the mob list). At High Threat you get regular officers instead. Their model files are kept in `_Backups/removed_v0.92`.
+- **Books:** a bookcase has **2 shelves of 8 books** (16 spaces), and **you see the books that are really in it**: space 1 is the top shelf's first book (from the left), space 9 the bottom shelf's first, and an empty space is a gap on the shelf. Every **bookcase you find has 1 or 2 books** left in it (it's the apocalypse). Right-click a bookcase to take them or put books back (only books go in). Bookcases you place start empty.
+  - Books are **3D**, in **random cover colours**. Hold one and **right-click to read it**: an open book with page turning (arrows / A D / mouse wheel / click a page, Esc or E closes).
+  - In your hand the name shows the **book's title, with the author underneath** instead of the tip.
+  - **Every .json file in the `books/` folder is one book.** Copy `books/example_book.json` to write your own (title, author, year, colour, how often it turns up, and the pages — or one long `text` the game cuts into pages). `books/README.txt` explains every field. `Play NovaCraftZ.bat` picks new books up straight away; run `Rebuild index.bat` for GitHub / Windows.
+
+## v0.91
+- **Machete combo, faster:** 1 s between hits (1.2 s after the ultimate). Hits do 1x, 1.25x and 2x the machete's damage.
+- **Tool damage by material:** a wooden machete or axe does 3 hearts, a wooden pickaxe 2, a wooden shovel or hoe 1. Stone is 1.5x, iron 2x, diamond 3x, rubynite 4x.
+- **Hover a tool** to see its **DMG** (pickaxes and shovels show **blocks per minute** instead). **Hold Shift** for more: the combo damage, cooldown, mining speeds, Vein Miner level and **kills with that item** (saved on the item).
+- **Iron Plated armour is 30% stronger** (the full suit stops 80% of a hit). The armour bar is gone: your armour shows as **shields** above your hearts, rated out of 10 (the full iron suit = 8). Only the shields you have are drawn.
+- **Thirst (Hard mode only):** a row of water drops above the apples. Drink water or soda. Run dry and you start losing health. Off in Easy and Baby mode.
+- **Plastic bottles:** water and all the sodas are 3D plastic bottles. Finish one and you keep the **empty bottle** (stacks to 64). Smelt it into **Plastic**. A Plastic Storage Container is now **10 plastic**.
+- **White Power Cable** (1 copper ingot = 8): sticks to any side of a block (floors, walls, ceilings) and links up with the cables next to it. Run it from a running generator: anything touching the cable within **16 blocks** has power.
+- **3D wheat**, and the **Straw Hat** (10 wheat + 2 cloth): a straw hat with a red band, worn in the helmet slot. Shows on your character.
+- **Vein Miner** (pickaxe mod at the Modification Bench): mine one ore and the touching ores of the same kind go with it (8 / 16 / 32). Level 2 mines ores 2x faster, level 3 instantly.
+- **Blast Furnace** (6 brick, 4 cobblestone, 4 iron; 2 wide x 2 tall): a dark, clean furnace screen. Put something in, add fuel (sticks, planks, logs, coal or charcoal), and it fires up with the fire fading in, then fading away when it's done. Smelts raw ores and ore blocks, sand to glass, cobblestone to stone, plastic bottles to plastic and **logs to charcoal**. Food goes on the stove. Collect the output to get its **XP** (iron 7 each, gold 10, titanium 12…). **Charcoal makes torches** too.
+- **Realistic trades:** survivors price things by what they're worth (no more ammo for a chocolate bar). Good karma = friend prices; bad karma = they charge more; terrible karma, or if you hurt them = "I don't trade with people like you."
+- **AIPD voice** no longer stutters: it reads the whole line smoothly (dots, commas and colons stay in the subtitle).
+- **Studio → Sculpt → Mirror:** Default, **Half** (whatever you add, remove or paint on one side is copied to the other, 180°) or **Quarter** (copied into all 4 quarters, 90°). The hover outline shows every copy.
+
+## v0.90
+- **Machete combo (every machete), Minecraft Dungeons / Better Combat style.** One click = one committed hit, and you step forward about a block as you swing (you stop short if a zombie is right in front of you). After each hit you draw the machete back while a **cooldown bar** under the crosshair drains and disappears:
+  - **Hit 1:** a slash right-to-left (1.5x damage), then **3 s**
+  - **Hit 2:** a backhand left-to-right (2x damage), then **4 s**
+  - **Hit 3, ULTIMATE:** an overhead slam (3.5x damage, wide arc, knocks zombies flying, hit-stop + camera shake), then **5 s**, and the combo starts again at hit 1
+- Every hit cuts all the zombies in an arc in front of you. Three pips above the bar show where you are in the combo (the ultimate is red). Wait 6 s without attacking and the combo goes back to hit 1.
+- Animated in **1st and 3rd person**. All the timings, damage and keyframes are at the top of `js/combo.js`.
+- Leaves, cactus, hay and so on still get cut like before (also during the cooldown).
+
+## v0.89
+- **Iron Storage Rack** (crafting book: 20 iron ingots). A steel rack 2 wide x 3 tall with 3 shelves, 4 pairs of stretcher beams and wire decks. It's placed running to your right. Break any part and the whole rack comes down (anything on it drops).
+- **Plastic Storage Container.** A black tote with a red lid (3 coal + 1 iron). It holds as much as a chest. Paint the lid any colour; the rest stays black. Right-click a rack shelf while holding one to slide it in: 2 per shelf, 6 inside, and 2 more on top if there's room above. You can also place it anywhere like a normal block.
+  - **Shift + hold left-click for 3 s** picks a crate up with everything still inside, and it goes straight into your inventory. In Survival a plain click won't break a crate.
+  - Carrying a crate with items in it is heavy: you walk slower and your view narrows by 10°. Empty crates stack to 16.
+  - Crates keep their lid colour everywhere: in the world, your inventory, your hand, and Creative pick-block.
+- **Modification Bench** (6 iron + 4 oak planks). It's 2 x 2: red tool chest, green tool mat, pegboard and a monitor. Hold a tool or weapon and right-click the bench to lay it on the mat, and its mods page opens. The page is styled like My Character.
+  - Machetes get **Machete Dash**, 5 ranks, paid for in iron, gold, diamonds and rubynite. Mods are stored on that machete.
+  - Every other tool or weapon shows a *coming soon* page for now.
+- **Machete Dash moved off the skill tree.** If you had ranks in it, those skill points are refunded. While you dash, and for 5 seconds after, zombies can't hurt you. Anime speed lines rush past during the dash.
+- **Enchant glint:** upgraded tools shimmer in the inventory and hotbar, in your hand and on the bench mat. Pick the colour in Options → Colours → *Enchant glint (upgraded tools)*.
+- **Speed-line colour:** Options → Colours → *Speed lines (flying / dash)*.
+- **Iron Plated armour:** Mask (5 iron), Vest (8), Pants (7) and Boots (4). It's a silver mercenary suit with black detail, black outlines round the eyes and red glowing eyes, and no logo.
+  - It's drawn from your suit skin (`textures/entity/iron_plated_suit.png`): each piece swaps that part of your skin for the suit, so it bends with your elbows and knees and nothing of your own skin pokes through. Take the mask off and your own head is back. The belt logo is gone and the eyes glow red.
+  - With a sculpted (Studio) skin, your character switches to the normal player shape with your normal skin while you wear any iron piece, the same as the inventory picture. Take the last piece off and your sculpt comes back.
+  - Each piece has its own durability and stops part of every hit, gunshots and machete cuts included. The full suit stops 62%, a lot more than a police vest.
+  - With any iron piece on, a steel **armour bar** shows above your hearts instead of the shield icons.
+- **AIPD vs the suit:** the iron mask hides your face, so units stop you to question you. In the full suit they call out the combat plating.
+- **Black Ops take 5 minutes to arrive** after you hit an officer. An ETA timer shows at the top of the screen. Getting arrested or dying cancels it.
+- **Jail cell:** there's now a bunk next to the toilet. Sit on the toilet (time runs 3x faster) or lie on the bunk (8x faster) to kill time. Shift gets you up.
+
+## v0.88c
+- **Build assist works like Bedrock now:** holding right-click only places a block when your crosshair moves onto a new empty spot next to the blocks you're laying — aim into the air just past the tip. It never builds on its own or faster than you aim (max ~11 a second), and once 2 blocks are down it only adds at the two ends of that line, never beside it. Speed bridging only kicks in while you're actually walking at an edge, looking down.
+- **Sculpted placed blocks keep their pixels:** a sculpted paint bucket (or any sculpted item that places a block) now fills the whole 1 x 1 block with one block-cube per cube you sculpted (up to 112), so it looks exactly like your Studio model instead of a blurry shrunk copy.
+- **Block sculpt detail:** 16 / 32 / 64 / **96 / 112** cubes per block.
+- **No extra shingle block past the gable ends of roofs** in new worlds (houses in worlds you already have stay as they were, so nothing breaks at chunk edges).
+
+## v0.88b
+- **Intro is black from the first frame:** the BrazyLabz screen is part of the page itself now, so the old NovaCraftZ loading screen never flashes when you refresh. New, clean logo (`textures/gui/brazylabz_logo.jpg`).
+- **Red 3D Rubynite tools:** all 5 (pickaxe, axe, shovel, hoe, machete) are the same 3D models as the diamond tools, in red — including the machete and shovel, which were flat before. If you've sculpted / repainted a diamond tool in the Studio, its rubynite twin copies your version in red (until you edit the rubynite one yourself).
+- **Sculpt:** cube size goes up to **112**. Holding the mouse to paint cubes no longer drags the view like a picture, and painting follows the pointer over every face (adding / removing still stays on the layer you started on).
+- **Creative build assist:**
+  - *Accurate placement* (like Accurate Block Placement Reborn): hold right-click with a block — after 2 blocks in a row it keeps building that line, one after the last one, fast (about 14 blocks a second), even when you move faster than your crosshair.
+  - *Speed bridging* (like Bedrock): hold right-click and walk or run at an edge while looking down — a block goes down in front of your feet every step.
+  - Turn it on for Survival too with `DC.buildAssist.survival = true` (js/v88.js).
+
+## v0.88 notes: BrazyLabz intro, AIPD Black Ops + K9, Rubynite & Titanium, vanilla-style ores
+- **Boot intro:** black screen → the BrazyLabz logo fades in while slowly zooming → fades out → black → the main menu fades in. Click or press any key to skip. The logo is `textures/gui/brazylabz_logo.png` (swap it for a new one any time).
+- **AIPD Black Ops:** hit an AIPD officer and a black AIPD truck drives up with its lights and siren going, pulls over, and **two AIPD Black Ops** get out — or sometimes an **AIPD K9**. You get **1 minute** to stop and put your hands up (**G** = surrender; a timer shows at the top). Don't, or hit / destroy another unit, and they open fire with their **black pistols** to neutralise you. Destroy a unit outright and the squad arrives already shooting.
+  - **Black Op:** the officer's older, taller, buffer cousin — 2.75 blocks tall, ~20% wider armoured chest (AIPD / BLACK OP vest, red shoulder patches), dark gunmetal skeleton. Too big for 1 x 2 doors (needs 2 x 3).
+  - **AIPD K9:** a robot police dog, a little faster than the zombie monkeys; it barks and circles you during the minute, then bites.
+  - Both **smash straight through any block** in their way (walls, doors, glass) while they're after you.
+  - Creative → Mobs → AIPD has spawn eggs for both; Studio → Library → AIPD Force has both models to repaint.
+- **The patrol officer is 10% shorter** (1.86 blocks) so he fits through normal doorways.
+- **Siren eyes:** every AIPD unit chasing you flashes its eyes red / blue like a light bar.
+- **Ores like vanilla:** no more spikes or crystals sticking out (diamond too) — every ore is a plain block. The ore pixels sit **sunken** into the stone (pixel-depth shading) and their bright pixels **glow** in the dark. Your own Studio glow on an ore picture always wins.
+- **Rubynite Ore** (for electronics — more recipes later): only below y 70, rarer than diamonds, needs a diamond pickaxe. Drops **Rubynite**. Red **Rubynite tools** (pickaxe, axe, shovel, hoe, machete) use the exact 3D models of the purple diamond tools, recoloured red — craft them like diamond tools.
+- **Titanium Ore** (y 40–170, where gold and diamonds are) + **Titanium Ingot** (no recipes yet; the ingot is in Creative).
+- **Ore spawning:** each ore thins out below its home depth — coal near the top, then copper and iron, gold from y 170, titanium y 40–170, diamonds below y 110 (scarcer than before), rubynite below y 70 (rarest). New chunks only; places you've already explored keep their ores.
+- **Creative → Map Builder** now holds the **Block Replace Wand** and the new **Extrude Wand**: right-click a block face = the whole flat surface grows one block (again = next layer), left-click = it shrinks, Shift = only that kind of block, Ctrl+Z = undo.
+- **Library → Maps → Westvale High** now opens for editing (it used to say it can't be opened). Save & Quit asks to save over it; Zombies then plays your version.
+- **Placed sculpted paint buckets** are the right size now (the size of the normal paint bucket, not the small in-hand size).
+- Backup from before these changes: `_Backups/backup-2026-10-29_v0.87f/`.
+
+## v0.86 notes: mods without code — your own guns and mobs, mod files, sharper item images
+- **3D Item Image**: much sharper (drawn big, then shrunk). In the popup, **drag the picture to turn the item, scroll to zoom**, Reset angle, then save.
+- **Make edits official**: your item images were in the pack, but the pack only becomes official when you run **Make Studio edits official.bat** — the game now tells you so after downloading. (Your pack from 19:06 has been made official: the DSR-50 / MP7 / diamond hoe / stone machete images and your other edits.) The .bat also looks in Documents now. Your own skin's glow pixels stay yours (not put in the pack).
+- **Mod files** — Studio → ••• → **Export (mod file)** saves ONE `.ncmod.json` with everything about the thing you have open: pictures, 3D model, sculpt, glow, grip, item image, gun settings and sounds, a mob's shape + behaviour. **Library → Import mod** (or ••• → Import a file…) adds it on any copy of the game — no code. (New blocks / items / mobs ask to restart the game once.) ••• → "Export the picture files" still gives you the PNGs.
+- **Your own guns**: open an item you made in the Weapons category → ••• → **Gun settings…**: It's a gun, works like (pistol / rifle / shotgun / sniper / SMG — its reload, aiming and recoil), damage, seconds between shots, full-auto, magazine, ammo, range, which way the barrel points on the picture, and your own **shot sound** and **reload sound** (mp3 / wav / ogg). In your hands it shows **your item's 3D model**.
+- **Your own mobs**: a model in My Models with a behaviour (Calm animal, Civilian, Neutral, Enemy, Boss) gets a **Spawn Egg** (Creative → **Your Mobs**). Right-click the ground: it comes alive — calm ones wander and run when hurt, neutral ones fight back, enemies hunt you, a boss has its own health bar at the top of the screen.
+- Backup from before these changes: `_Backups/backup-2026-10-28_v0.86/` (and the bake's own backup: `_Backups/studio_2026-10-29_0236/`).
+
+## v0.85 notes: repair AIPD units, trade with survivors
+- **Repair a downed AIPD officer**: hold a **Servo Motor, Circuit Board, Power Cell or AIPD Processor Core** and right-click a robot lying on the ground. A red **REPAIR** bar shows above it; each part fills a quarter. With **4 parts** it stands up, its head spins, its eyes go from red to **green** and it thanks you. A repaired unit is on your side: it never comes after you.
+- **Trading** (like Minecraft villagers): talk to a survivor → **Got anything to trade?** Each one has 2–3 offers: they want bullets, iron, copper, coal… and give Med-Kits, bandages, rubbing alcohol, soda, food… The list shows every offer and what you have; the trades you can afford are your answers. Each offer can be used a few times and comes back the next day. Some survivors have nothing to trade.
+- Glow: your first-person arms are your sculpted arms with their glow (also for skins sculpted before v0.84b).
+- Backup from before these changes: `_Backups/backup-2026-10-28_v0.85/`.
+
+## v0.84d notes
+- **Your hands in first person** are now your **sculpted** arms (the same shape and pixels as the Studio's 3D view) when your skin is sculpted, with its glow pixels glowing.
+- Backup from before this change: `_Backups/backup-2026-10-28_v0.84d/`.
+
+## v0.84c notes
+- **Glow pixels**: brighter (like the zombies' eyes) and in their true colour — a purple glow pixel is bright purple, not pinkish, and the night light on you no longer dims it. Your skin's glow pixels now show on **your hands in first person** too.
+- **Water**: the waving surface no longer splits from its sides at the edges. Flowing water is re-drawn in the background (no stutter while it spreads), and its light catches up a moment later.
+- **Smoother exploring**: new chunks are now made in the browser's spare time between frames instead of in the middle of one (making a chunk takes ~10 ms — that was the stutter when you crossed into new ground). The chunks right around you are still made at once.
+- Backup from before these changes: `_Backups/backup-2026-10-28_v0.84c/`.
+
+## v0.84b notes
+- **Studio brush on sculpted skins / mobs paints pixel by pixel again.** After a sculpt, all the cubes of one colour shared one pixel, so painting one recoloured all of them (like a fill bucket). Now every little cube face has its own pixel. A sculpted skin keeps its normal 64 × 64 skin on top (what friends see); the sculpt's pixels go in rows under it. Re-save a skin you sculpted before to get this.
+- **Glow pixels on skins are saved** (and your character glows with them). Glow pixels also come along when you **Save as new** block / item.
+- **Your real sun shadow** shows when you stand on the ground (it sank into the ground — the curved world was bending it) and no longer wobbles. The round blob shadow from v0.84 is gone.
+- **Water bucket**: pour into flowing water (7/8, 6/8…) to make it a full block. In **Creative the water bucket never runs out**. It moved from Paint to **Items**.
+- Backup from before these changes: `_Backups/backup-2026-10-28_v0.84b/`.
+
 ## v0.84 notes: fog colour, Block Replace Wand, your shadow, smoother water
 - **The black distant silhouettes are gone** (buildings went dark, then black, then white fog). Far away is the normal fog again, and it's lighter on the graphics card.
 - **Options → Colours → Fog colour**: pick any colour for the fog and horizon to try a different look (it still darkens at night). **Default** puts the sky's own colour back.
